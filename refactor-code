@@ -1,0 +1,73 @@
+interface InventoryService {
+    void verifyInventory(Order order) throws Exception;
+}
+
+interface PaymentProcess {
+    boolean processPayment(double amount) throws Exception;
+}
+
+interface NotificationService {
+    void sendNotification(String email, String message);
+}
+
+interface OrderRepository {
+    void updateOrderStatus(int orderId, String status);
+}
+
+class InventoryServiceImpl implements InventoryService {
+    @Override
+    public void verifyInventory(Order order) throws Exception {
+        if (inventory < order.getQuantity() ) {
+            throw new Exception("Out of stock");
+        }
+    }
+}
+
+class StandardPaymentProcessor implements PaymentProcess {
+    private StandarPaymentService standarPaymentService;
+
+    public StandardPaymentProcessor(StandarPaymentService standarPaymentService) {
+        this.standarPaymentService = standarPaymentService;
+    }
+
+    @Override
+    public boolean processPayment(double amount) {
+        return standarPaymentService.process(amount);
+    }
+}
+
+class ExpressPaymentProcessor implements PaymentProcess {
+    private ExpressPaymentService expressPaymentService;
+
+    public ExpressPaymentProcessor(ExpressPaymentService expressPaymentService) {
+        this.expressPaymentService = expressPaymentService;
+    }
+
+    @Override
+    public boolean processPayment(double amount) {
+        return expressPaymentService.process(amount, "priority");
+    }
+}
+
+
+class OrderRepositoryImpl implements OrderRepository {
+
+    private final Connection database; // Atributo de conexión a la base de datos
+
+    public OrderRepositoryImpl(Connection database) {
+        this.database = database;
+    }
+
+    @Override
+    public void updateOrderStatus(int orderId, String status) {
+        // Actualización en bd conforme los parametroos   
+    }
+}
+
+class NotificationServiceImpl implements NotificationService {
+    @Override
+    public void sendNotification(String email, String message) {
+        // Envía un email de notificación al cliente
+    }
+}
+
