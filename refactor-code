@@ -2,7 +2,7 @@ interface InventoryService {
     void verifyInventory(Order order) throws Exception;
 }
 
-interface PaymentProcess {
+interface PaymentProcessService {
     boolean processPayment(double amount) throws Exception;
 }
 
@@ -23,7 +23,7 @@ class InventoryServiceImpl implements InventoryService {
     }
 }
 
-class StandardPaymentProcessor implements PaymentProcess {
+class StandardPaymentProcessorService implements PaymentProcessService {
     private StandarPaymentService standarPaymentService;
 
     public StandardPaymentProcessor(StandarPaymentService standarPaymentService) {
@@ -36,7 +36,7 @@ class StandardPaymentProcessor implements PaymentProcess {
     }
 }
 
-class ExpressPaymentProcessor implements PaymentProcess {
+class ExpressPaymentProcessorService implements PaymentProcessService {
     private ExpressPaymentService expressPaymentService;
 
     public ExpressPaymentProcessor(ExpressPaymentService expressPaymentService) {
@@ -68,6 +68,73 @@ class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendNotification(String email, String message) {
         // Envía un email de notificación al cliente
+    }
+}
+
+class OrderProcessor {
+    private InventoryService inventoryService;
+    private OrderRepository orderRepository;
+    private NotificationService notificationService;
+    private PaymentProcessService paymentProcessService;
+    
+    public OrderProcessor(InventoryService inventoryService, 
+        OrderRepository orderRepository, 
+        NotificationService notificationService, 
+        PaymentProcessService paymentProcessService) {
+        this.inventoryService = inventoryService;
+        this.orderRepository = orderRepository;
+        this.notificationService = notificationService;
+        this.paymentProcessService = paymentProcessService;
+    }
+
+    public void processOrder(Order order) {
+        inventoryService.verifyInventory(order);
+        paymentProcessService.processPayment(order);
+        orderRepository.updateOrderStatus(order, "processed");
+        notificationService.sendNotification("email","Your order has been processed.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        InventoryService inventoryService = new InventoryServiceImpl();
+        OrderRepository orderRepository = new OrderRepositoryImpl();
+        NotificationService notificationService = new NotificationServiceImpl();
+
+        // Crear el servicio de pago estándar y su procesador
+        PaymentProcessService paymentProcessService = new StandardPaymentProcessorService(standarPaymentService);
+
+        // Crear la instancia de OrderProcessor con los servicios inyectados
+        OrderProcessor orderProcessor = new OrderProcessor(
+            inventoryService,
+            orderRepository,
+            notificationService,
+            paymentProcessService
+        );
+
+
+        // Crear el servicio de pago estándar y su procesador
+        paymentProcessService = new StandardPaymentProcessorService(standarPaymentService);
+
+        // Crear la instancia de OrderProcessor con los servicios inyectados
+        OrderProcessor orderProcessor = new OrderProcessor(
+            inventoryService,
+            orderRepository,
+            notificationService,
+            paymentProcessService
+        );
+
+        // Crear el servicio de pago xpress y su procesador
+        paymentProcessService = new ExpressPaymentProcessorService(standarPaymentService);
+
+        // Crear la instancia de OrderProcessor con los servicios inyectados
+        orderProcessor = new OrderProcessor(
+            inventoryService,
+            orderRepository,
+            notificationService,
+            paymentProcessService
+        );        
     }
 }
 
