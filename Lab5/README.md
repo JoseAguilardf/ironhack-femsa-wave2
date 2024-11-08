@@ -5,11 +5,11 @@ Consultas SQL proporcionadas para optimización:
 
 Consulta de pedidos: recupera pedidos con muchos artículos y calcula el precio total.
 
-***SELECT Orders.OrderID, SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS TotalPrice
-FROM Orders
-JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
-WHERE OrderDetails.Quantity > 10
-GROUP BY Orders.OrderID;***
+      SELECT Orders.OrderID, SUM(OrderDetails.Quantity * OrderDetails.UnitPrice) AS TotalPrice
+      FROM Orders
+      JOIN OrderDetails ON Orders.OrderID = OrderDetails.OrderID
+      WHERE OrderDetails.Quantity > 10
+      GROUP BY Orders.OrderID;
 
 ### SOLUCION:
 
@@ -24,7 +24,7 @@ Este índice permite que la base de datos realice la operación de JOIN con mayo
 
 ## 2. Consulta de cliente: encuentre todos los clientes de Londres y ordene por nombre de cliente.
 
-***SELECT CustomerName FROM Customers WHERE City = 'London' ORDER BY CustomerName;***
+      SELECT CustomerName FROM Customers WHERE City = 'London' ORDER BY CustomerName;
 
 ### SOLUCION:
 Crear un indice para la columna City y otro para la columna CustomerName, para que la consulta busque rápidamente los registros que coinciden.
@@ -39,9 +39,9 @@ Consultas NoSQL para revisión:
 
 Consulta de publicaciones de usuario: recupera las publicaciones activas más populares y muestra su título y número de “Me gusta”.
 
-***db.posts
-  .find({ status: "active" }, { title: 1, likes: 1 })
-  .sort({ likes: -1 });***
+      db.posts
+      .find({ status: "active" }, { title: 1, likes: 1 })
+      .sort({ likes: -1 });
 
 ### SOLUCION:
 
@@ -52,10 +52,10 @@ db.posts.createIndex({ likes: -1 });***
 
 ## 4. Agregación de datos de usuario: resuma la cantidad de usuarios activos por ubicación.
 
-***db.users.aggregate([
-  { $match: { status: "active" } },
-  { $group: { _id: "$location", totalUsers: { $sum: 1 } } },
-]);***
+      db.users.aggregate([
+      { $match: { status: "active" } },
+      { $group: { _id: "$location", totalUsers: { $sum: 1 } } },
+      ]);
 
 
 ### SOLUCION:
