@@ -29,7 +29,7 @@ No deberiamos de tener 2 pruebas en un test, ya que deberian de ir por separado 
         ASSERT_FALSE(authenticate(user, passwordFail), messageFail)
       END TEST
 
-***Escenario 2: Funciones de procesamiento de datos**
+***Escenario 2: Funciones de procesamiento de datos***
 
       TEST DataProcessing
         DATA data = fetchData()
@@ -43,5 +43,28 @@ No deberiamos de tener 2 pruebas en un test, ya que deberian de ir por separado 
 
 ***Analisís***
 
+Como el caso anterior vemos que existen 2 assert, sin embargo en este caso solo se ejecutaria uno, se ejecutaria el assert del error cuando exista un error ocaciondo por processData o en su caso el assert si processData no ocurrio un error.  
 
+***Test Modificado***
+
+
+      INITIALIZE
+        messageOk = "Data should be processed successfully"
+        messageFail = "Should handle processing errors"
+      END INITIALIZE
+      
+      TEST DataProcessingSuccessful
+        DATA data = fetchData()
+        processData(data)
+        ASSERT_TRUE(data.processedSuccessfully, messageOk)
+      END TEST
+      
+      TEST DataProcessingFail
+        DATA data = fetchDataError()
+        TRY
+          processData(data)
+        CATCH error
+          ASSERT_EQUALS("Data processing error", error.message, messageFail)
+        END TRY
+      END TEST
 
