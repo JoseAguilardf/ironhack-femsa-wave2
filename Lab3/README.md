@@ -11,6 +11,24 @@
 
 No deberiamos de tener 2 pruebas en un test, ya que deberian de ir por separado por buena practica, cuando contiene mas de una prueba hace que sea dificil identificar los problemas de nuestra unitaria, asi mismo si llegara a tronar un assert los siguientes assert no se ejecutarian.
 
+***Test Modificado***
+
+      INITIALIZE
+        messageOk = "Authentication should succeed with correct credentials"
+        messageFail = "Authentication should fail with incorrect credentials"
+        passwordOk = "validPass"
+        passwordFail = "wrongPass"
+        user = "validUser"
+      END INITIALIZE
+
+      TEST UserAuthenticationWithValidCredentials
+        ASSERT_TRUE(authenticate(user, passwordOk), messageOk)
+      END TEST
+      
+      TEST UserAuthenticationWithInvalidCredentials
+        ASSERT_FALSE(authenticate(user, passwordFail), messageFail)
+      END TEST
+
 ***Escenario 2: Funciones de procesamiento de datos**
 
       TEST DataProcessing
