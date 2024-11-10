@@ -68,3 +68,10 @@ Como el caso anterior vemos que existen 2 assert, sin embargo en este caso solo 
         END TRY
       END TEST
 
+***Escenario 3: Capacidad de respuesta de la interfaz de usuario***
+
+
+      TEST UIResponsiveness
+        UI_COMPONENT uiComponent = setupUIComponent(1024)
+        ASSERT_TRUE(uiComponent.adjustsToScreenSize(1024), "UI should adjust to width of 1024 pixels")
+      END TEST
