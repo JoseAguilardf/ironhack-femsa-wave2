@@ -75,3 +75,33 @@ Como el caso anterior vemos que existen 2 assert, sin embargo en este caso solo 
         UI_COMPONENT uiComponent = setupUIComponent(1024)
         ASSERT_TRUE(uiComponent.adjustsToScreenSize(1024), "UI should adjust to width of 1024 pixels")
       END TEST
+
+
+***Analisís***
+
+Podemos ver que el test solo tiene un tamaño, esto hace que no tenga robustes sobre los diferentes tamaños, ademas vemos que hacen falta pruebas de cuando ocurre un error.
+
+      INITIALIZE
+        screen = 1024
+        screenFail= 0
+        messageOk1024 = "UI should adjust to width of 1024 pixels"
+        UI_COMPONENT uiComponent1024 = setupUIComponent(1024)
+        UI_COMPONENT uiComponent512 = setupUIComponent(512)
+      END INITIALIZE
+
+      TEST UIResponsivenessAt1024Pixels
+        boolean result = uiComponent1024.adjustsToScreenSize(1024)
+        ASSERT_TRUE(result,messageOk1024)
+      END TEST
+
+
+      TEST UIResponsivenessAt1024PixelsFail
+            TRY
+              uiComponent512.adjustsToScreenSize(1024)
+            CATCH error
+              ASSERT_FALSE(error,messageOk1024)
+            END TRY
+      END TEST
+
+
+      
