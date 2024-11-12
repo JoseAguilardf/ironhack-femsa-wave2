@@ -76,3 +76,34 @@
           RETURN "Token expirado"
         ELSE:
           RETURN "Token válido"
+
+***Escenario 3: Plan de comunicación segura de datos***
+
+      PLAN secureDataCommunication:
+        IMPLEMENT SSL/TLS for all data in transit
+        USE encrypted storage solutions for data at rest
+        ENSURE all data exchanges comply with HTTPS protocols
+
+***Vulnerabilidades***
+
+  No comprobar HTTPS para cada conexión puede permitir ataques de intermediario 
+  No renovar los certificados SSL/TLS a tiempo aumenta el riesgo de conexiones inseguras.
+
+***Mejoras:***
+
+Usar TLS 1.2 o superior, cifrado fuerte (AES-256), verificación estricta de HTTPS y renovación periódica de certificados.
+
+      PLAN secureDataCommunication:"
+      
+        # Asegurar el almacenamiento con cifrado fuerte
+        FUNCTION encryptData(data):
+          encryptionKey = generateStrongKey()
+          encryptedData = encryptWithAES256(data, encryptionKey)
+          RETURN encryptedData
+      
+        # Comprobar que todas las comunicaciones usan HTTPS
+        FUNCTION enforceHTTPS(url):
+          IF url DOES NOT startWith "https://":
+            RETURN "URL no segura"
+          ELSE:
+            RETURN "URL segura"
