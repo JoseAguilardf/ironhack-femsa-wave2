@@ -7,12 +7,18 @@ info:
 servers:
   - url: https://api.mitiendita.com/v1
     description: API Principal
-
+tags:
+  - name: Usuarios
+    description: Operaciones de registro e inicio de sesión de usuarios
+  - name: Carrito
+    description: Operaciones relacionadas con el carrito de compra
 paths:
   /usuarios:
     post:
       summary: Crear usuario
       description: Crea una cuenta de usuario con nombre y correo electrónico.
+      tags:
+        - Usuarios  
       requestBody:
         required: true
         content:
@@ -31,6 +37,8 @@ paths:
     get:
       summary: Ver carrito
       description: Retorna los productos actuales en el carrito de un usuario.
+      tags:
+        - Carrito  
       parameters:
         - name: usuarioId
           in: path
@@ -47,6 +55,8 @@ paths:
     post:
       summary: Agregar producto al carrito
       description: Añade un producto específico al carrito de un usuario.
+      tags:
+        - Carrito 
       parameters:
         - name: usuarioId
           in: path
@@ -67,6 +77,8 @@ paths:
     post:
       summary: Crear pedido
       description: Convierte el carrito de un usuario en un pedido procesado.
+      tags:
+        - Pedidos 
       requestBody:
         required: true
         content:
